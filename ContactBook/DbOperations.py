@@ -11,8 +11,8 @@ class DBOperations:
     Author: Austin Reimer
     """
 
-    db_name = "DB_name.sqlite3"
-    table_name = "table_name"
+    db_name = "contacts.db"
+    table_name = "contact"
 
     def create_DB(self):
         """
@@ -24,35 +24,22 @@ class DBOperations:
                 db.execute(
                     f""" CREATE TABLE IF NOT EXISTS {self.table_name}
                         (id integer primary key autoincrement not null,
-                        date string unique not null);"""
+                        name string not null,
+                        phoneNumber string not null
+                        );
+                    """
                 )
         except Exception as error:
-            print("DBOperations", "CreateDB", error)
+            print("DBOperations CreateDB", error)
 
-    def write_to_db(self, data_to_load):
+    def add_contact(self, name, phoneNumber):
+        sql = f"""
+            INSERT INTO {self.table_name}
+            (name, phoneNumber)
+            values(?,?)
         """
-        The method is used to Write new data to the database.
-        Author: Austin Reimer
-        """
-        try:
-            with Open_DB(self.db_name) as db:
-                sql = f"INSERT INTO {self.table_name} (date) values(?)"
-                count = 0
-                for row in data_to_load:
-                    try:
-                        data = (row["date"],)
-                        db.execute(sql, data)
-                        count += 1
-                    except Exception as error:
-                        print("DBOperations", "write_to_do loop", error)
-
-                error_mess = f"With {len(data_to_load) - count} errors."
-                print(
-                    f"Wrote {count} lines in the database. {error_mess}",
-                    "output.log",
-                )
-        except Exception as error:
-            print("DBOperations", "write_to_do", error)
+        with Open_DB(self.db_name) as db:
+            db.execute(sql, (name, phoneNumber))
 
     def read_from_db(self):
         """
@@ -61,14 +48,14 @@ class DBOperations:
         Author: Austin Reimer
         """
         try:
-            sql = f"SELECT * FROM {self.table_name} "
+            sql = f"SELECT name, phoneNumber FROM {self.table_name} "
 
             with Open_DB(self.db_name) as db:
                 db.execute(sql)
                 return_value = db.fetchall()
             return return_value
         except Exception as error:
-            print("DBOperations", "read_from_db", error)
+            print("DBOperations read_from_db", error)
 
     def delete_all_rows(self):
         """
@@ -79,7 +66,7 @@ class DBOperations:
             with Open_DB(self.db_name) as db:
                 db.execute(f"DELETE FROM {self.table_name}")
         except Exception as error:
-            print("DBOperations", "delete_db", error)
+            print("DBOperations delete_db", error)
 
 
 class Open_DB:
@@ -98,7 +85,7 @@ class Open_DB:
             self.conn = None
             self.cursor = None
         except Exception as error:
-            print("Open_DB", "init", error)
+            print("Open_DB init", error)
 
     def __enter__(self):
         """
@@ -110,7 +97,7 @@ class Open_DB:
             self.cursor = self.conn.cursor()
             return self.cursor
         except Exception as error:
-            print("Open_DB", "enter", error)
+            print("Open_DB enter", error)
 
     def __exit__(self, exc_type, exc_value, exc_traceback):
         """
@@ -122,4 +109,4 @@ class Open_DB:
             self.cursor.close()
             self.conn.close()
         except Exception as error:
-            print("Open_DB", "exit", error)
+            print("Open_DB exit", error)

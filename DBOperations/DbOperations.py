@@ -27,7 +27,7 @@ class DBOperations:
                         date string unique not null);"""
                 )
         except Exception as error:
-            print("DBOperations", "CreateDB", error)
+            print("DBOperations CreateDB", error)
 
     def write_to_db(self, data_to_load):
         """
@@ -44,7 +44,7 @@ class DBOperations:
                         db.execute(sql, data)
                         count += 1
                     except Exception as error:
-                        print("DBOperations", "write_to_do loop", error)
+                        print("DBOperations write_to_do loop", error)
 
                 error_mess = f"With {len(data_to_load) - count} errors."
                 print(
@@ -52,7 +52,7 @@ class DBOperations:
                     "output.log",
                 )
         except Exception as error:
-            print("DBOperations", "write_to_do", error)
+            print("DBOperations write_to_do", error)
 
     def read_from_db(self):
         """
@@ -68,7 +68,7 @@ class DBOperations:
                 return_value = db.fetchall()
             return return_value
         except Exception as error:
-            print("DBOperations", "read_from_db", error)
+            print("DBOperations read_from_db", error)
 
     def delete_all_rows(self):
         """
@@ -79,7 +79,7 @@ class DBOperations:
             with Open_DB(self.db_name) as db:
                 db.execute(f"DELETE FROM {self.table_name}")
         except Exception as error:
-            print("DBOperations", "delete_db", error)
+            print("DBOperations delete_db", error)
 
 
 class Open_DB:
@@ -98,7 +98,7 @@ class Open_DB:
             self.conn = None
             self.cursor = None
         except Exception as error:
-            print("Open_DB", "init", error)
+            print("Open_DB init", error)
 
     def __enter__(self):
         """
@@ -110,7 +110,7 @@ class Open_DB:
             self.cursor = self.conn.cursor()
             return self.cursor
         except Exception as error:
-            print("Open_DB", "enter", error)
+            print("Open_DB enter", error)
 
     def __exit__(self, exc_type, exc_value, exc_traceback):
         """
@@ -122,4 +122,4 @@ class Open_DB:
             self.cursor.close()
             self.conn.close()
         except Exception as error:
-            print("Open_DB", "exit", error)
+            print("Open_DB exit", error)
