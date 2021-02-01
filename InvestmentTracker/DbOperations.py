@@ -67,6 +67,19 @@ class DbOperations:
         except Exception as error:
             print("DBOperations read_from_db", error)
 
+    def edit_current_price(self, new_current_price, id):
+        sql = f"""
+            UPDATE {self.table_name}
+            SET currentPrice = ?
+            WHERE id == ?
+        """
+        data = (
+            new_current_price,
+            id,
+        )
+        with Open_DB(self.db_name) as db:
+            db.execute(sql, data)
+
 
 class Open_DB:
     """

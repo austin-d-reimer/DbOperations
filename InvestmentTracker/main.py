@@ -15,6 +15,7 @@ def userInput():
     3. View all owned
     4. Import
     5. Export
+    6. Update Current Price
     """
     )
 
@@ -30,6 +31,10 @@ def userInput():
         printAll()
     elif inputNumber == 4:
         importData()
+    elif inputNumber == 5:
+        print("export")
+    elif inputNumber == 6:
+        print("Update Current Price")
     else:
         print("Chose a valid number")
 
